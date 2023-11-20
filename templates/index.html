@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversor de Texto em Fala</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f7f7f7; /* Cor de fundo */
+        }
+        .container {
+            background-color: #ffffff; /* Cor de fundo do container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Sombra suave */
+            margin-top: 50px;
+        }
+        .header {
+            color: #2c3e50; /* Cor do título */
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #3498db; /* Cor do botão */
+            border-color: #3498db;
+        }
+        .audio-player {
+            margin-top: 15px;
+        }
+        .character-count {
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Conversor de Texto em Fala</h1>
+        </div>
+        <form method="post">
+            <div class="form-group">
+                <label for="text_input">Insira seu texto:</label>
+                <textarea class="form-control" name="text_input" id="text_input" rows="6" oninput="updateCharacterCount()">{{ text_input }}</textarea>
+                <span class="character-count" id="character_count">0 caracteres</span>
+            </div>
+            <div class="form-group">
+                <label for="voice_select">Escolha a voz:</label>
+                <select class="form-control" name="voice_select" id="voice_select">
+                    <option value="alloy" {% if selected_voice == 'alloy' %}selected{% endif %}>Alloy</option>
+                    <option value="echo" {% if selected_voice == 'echo' %}selected{% endif %}>Echo</option>
+                    <option value="fable" {% if selected_voice == 'fable' %}selected{% endif %}>Fable</option>
+                    <option value="onyx" {% if selected_voice == 'onyx' %}selected{% endif %}>Onyx</option>
+                    <option value="nova" {% if selected_voice == 'nova' %}selected{% endif %}>Nova</option>
+                    <option value="shimmer" {% if selected_voice == 'shimmer' %}selected{% endif %}>Shimmer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quality_select">Qualidade do Áudio:</label>
+                <select class="form-control" name="quality_select" id="quality_select">
+                    <option value="tts-1" {% if selected_quality == 'tts-1' %}selected{% endif %}>Normal</option>
+                    <option value="tts-1-hd" {% if selected_quality == 'tts-1-hd' %}selected{% endif %}>HD</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Gerar Áudio</button>
+        </form>
+        {% if message %}
+            <div class="alert alert-info mt-3">{{ message }}</div>
+        {% endif %}
+        {% if audio_file %}
+            <div class="audio-player">
+                <audio controls>
+                    <source src="{{ url_for('static', filename=audio_file) }}" type="audio/mpeg">
+                    Seu navegador não suporta áudio HTML5.
+                </audio>
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        function updateCharacterCount() {
+            var textLength = document.getElementById('text_input').value.length;
+            document.getElementById('character_count').innerText = textLength + ' caracteres';
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
